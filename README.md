@@ -1,2 +1,5 @@
 # roguelike-game
-roguelike game in unity
+Roguelike game in unity
+
+# Version 0.0
+Connected unity 3d placeholder with github repository
