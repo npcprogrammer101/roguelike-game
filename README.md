@@ -9,6 +9,6 @@ Implemented character movements & collision detections
 - Utilized 2D vectors as inputs then converted to 3D vectors
 - Vectors were normalized
 - User-input keys were setup
-- Physics raycasts (Capsulecast)
+- Physics raycasts (CapsuleCast)
 - Camera movements (yet to be optimized)
 - Code optimization
