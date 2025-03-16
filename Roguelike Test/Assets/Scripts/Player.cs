@@ -1,14 +1,35 @@
 
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Player : MonoBehaviour
 {   
     [SerializeField] private float moveSpeed = 5f;
-    //private float jumpPower = 10f;
-    private bool isWalking;
     [SerializeField] private GameInput gameInput;
+    
+
+
+    private bool isWalking;
     public void Update()
     {
+        PlayerMovement();
+    }
+
+    public bool IsWalking(){
+        return isWalking;
+    }
+
+    private void PlayerInteractions() {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        
+        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        float interactDistance = 2f;
+        Physics.Raycast(transform.position, moveDir, out RaycastHit raycastHit, interactDistance);
+
+
+    }
+    
+    private void PlayerMovement() {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
@@ -53,11 +74,7 @@ public class Movement : MonoBehaviour
 
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed); // slerp is for rotation, lerp is for movement
-
-        
     }
 
-    public bool IsWalking(){
-        return isWalking;
-    }
+
 }
