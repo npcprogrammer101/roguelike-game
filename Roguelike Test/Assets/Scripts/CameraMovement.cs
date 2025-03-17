@@ -5,9 +5,12 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
 
-    void Update()
+    void LateUpdate()
     {
-        Vector3 newPosition = new Vector3(target.position.x, 10f, target.position.z-5);
-        transform.position = newPosition;
+        if (target != null)
+        {
+            transform.position = new Vector3(target.position.x, target.position.y+10, target.position.z-5); // Directly follow the target position
+        }
     }
+
 }

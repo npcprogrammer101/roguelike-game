@@ -1,21 +1,52 @@
-
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
+    [Header("Movements")]
     [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private GameInput gameInput;
-    
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintSpeed;
 
+    [Header("Crouching")]
+    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float playerHeight = 2.8f;
+
+    [Header("Keybinds")]
+    [SerializeField] private GameInput gameInput;
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode crouchKey = KeyCode.C;
+
+    [Header("System")]
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] private BoxCollider col;
 
     private bool isWalking;
+    private bool isCrouching;
+
+    public MovementState state;
+
+    public enum MovementState{
+        walking,
+        sprinting,
+        crouching
+    }
+
+    private void Start()
+    {
+
+    }
     public void Update()
     {
         PlayerMovement();
+        StateHandler();
+        MyInput();
     }
 
     public bool IsWalking(){
         return isWalking;
+    }
+    public bool IsCrouching() {
+        return isCrouching;
     }
 
     private void PlayerInteractions() {
@@ -36,10 +67,9 @@ public class Player : MonoBehaviour
 
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 0.7f;
-        float playerHeight = 2.8f;
 
         bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
-
+        
         if (!canMove) {
             // Cannot move towards moveDir
 
@@ -66,6 +96,7 @@ public class Player : MonoBehaviour
             }
 
         }
+        
         if (canMove) {
             transform.position += moveDir * moveDistance;
         }
@@ -76,5 +107,37 @@ public class Player : MonoBehaviour
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed); // slerp is for rotation, lerp is for movement
     }
 
+    private void MyInput() {
+        
+        if (Input.GetKeyDown(crouchKey)) {
+            isCrouching = true;
+            playerHeight = 1.4f;
+            col.center = new Vector3(0f, 0.8f, 0f);
+            col.size = new Vector3(col.size.x, playerHeight/2, col.size.z);
+        }
 
+        if (Input.GetKeyUp(crouchKey)) {
+            isCrouching = false;
+            playerHeight = 2.8f;
+            col.center = new Vector3(0f, 1.5f, 0f);
+            col.size = new Vector3(col.size.x, playerHeight, col.size.z);
+        }
+    }
+
+    private void StateHandler() {
+        if (Input.GetKey(crouchKey)) {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+        }
+        else {
+            if (Input.GetKey(sprintKey)) {
+                state = MovementState.sprinting;
+                moveSpeed = sprintSpeed;
+            }
+            else {
+                state = MovementState.walking;
+                moveSpeed = walkSpeed;
+            }
+        }
+    }
 }

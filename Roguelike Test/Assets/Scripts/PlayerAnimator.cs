@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
-
     private const string IS_WALKING = "IsWalking";
+    private const string IS_CROUCHING = "IsCrouching";
     private Animator animator;
 
     [SerializeField] private Player playerMovement;
@@ -16,6 +16,7 @@ public class PlayerAnimator : MonoBehaviour
     {
         
         animator.SetBool(IS_WALKING, playerMovement.IsWalking());
+        animator.SetBool(IS_CROUCHING, playerMovement.IsCrouching());
     }
 
 }
