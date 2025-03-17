@@ -5,7 +5,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
 
-    void LateUpdate()
+    void LateUpdate() // Avoids camera jitter
     {
         if (target != null)
         {
